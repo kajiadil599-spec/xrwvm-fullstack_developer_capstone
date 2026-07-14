@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Best Cars</title>
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Best Cars</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/contact">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Contact Us</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Get In Touch</h3>
+                <p>Have questions about a vehicle or want to schedule a test drive? Reach out to our customer experience team.</p>
+                
+                <ul class="list-unstyled">
+                    <li class="mb-2"><strong>📍 Address:</strong> 123 Dealership Row, Toronto, ON, Canada</li>
+                    <li class="mb-2"><strong>📞 Phone:</strong> +1 (555) 019-2834</li>
+                    <li class="mb-2"><strong>✉️ Email:</strong> support@bestcars.com</li>
+                    <li class="mb-2"><strong>⏰ Hours:</strong> Mon - Sat: 9:00 AM - 7:00 PM</li>
+                </ul>
+            </div>
+            
+            <div class="col-md-6">
+                <h3>Send Us a Message</h3>
+                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for reaching out! We will reply shortly.');">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="4" placeholder="How can we help you today?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
