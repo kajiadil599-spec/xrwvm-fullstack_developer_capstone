@@ -93,4 +93,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/static')
 ]
 
-DEFAULT_AUTO_FIELD = 'django.db.backends.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'    #  CORRECT (Uses 'models')
