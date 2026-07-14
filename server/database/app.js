@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
@@ -29,14 +30,14 @@ mongoose.connection.on('open', async () => {
     // Seed Reviews if collection is empty
     const reviewCount = await Reviews.countDocuments();
     if (reviewCount === 0) {
-        await Reviews.insertMany(reviews_data['reviews']);
+        await Reviews.insertMany(reviews_data.reviews);
         console.log('Seeded Reviews collection successfully.');
     }
     
     // Seed Dealerships if collection is empty
     const dealerCount = await Dealerships.countDocuments();
     if (dealerCount === 0) {
-        await Dealerships.insertMany(dealerships_data['dealerships']);
+        await Dealerships.insertMany(dealerships_data.dealerships);
         console.log('Seeded Dealerships collection successfully.');
     }
 });
