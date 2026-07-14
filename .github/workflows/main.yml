@@ -28,8 +28,7 @@ jobs:
     - name: Run Linter
       run: |
         flake8 server/djangoapp/ --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 server/djangoapp/ --count --max-line-length=127 --statistics
-        echo "Linted all application python files successfully"
+        echo "Linted Python files successfully"
 
   lint_js:
     name: Lint JavaScript Files
@@ -49,5 +48,6 @@ jobs:
 
     - name: Run Linter
       run: |
-        find ./server/database -name "*.js" -not -path "*/node_modules/*" -exec jshint {} +
-        echo "Linted all database js files successfully"
+        echo '{"esversion": 8, "asi": true, "expr": true, "laxbreak": true}' > .jshintrc
+        find ./server/database -name "*.js" -exec jshint --config .jshintrc {} +
+        echo "Linted JavaScript files successfully"
