@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 backend_url = os.getenv('backend_url', 'http://localhost:3030')
-sentiment_analyzer_url = os.getenv('sentiment_analyzer_url', '')
+sentiment_analyzer_url = os.getenv('sentiment_analyzer_url')
 
 def get_request(endpoint, **kwargs):
     params = ""
@@ -15,7 +15,7 @@ def get_request(endpoint, **kwargs):
 
     request_url = backend_url + endpoint + "?" + params
 
-    print("GET from {} ".format(request_url))
+    print("GET from {}".format(request_url))
     try:
         response = requests.get(request_url)
         return response.json()
