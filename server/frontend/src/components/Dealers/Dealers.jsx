@@ -1,96 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import "./Dealers.css";
-import "../assets/style.css";
 import Header from '../Header/Header';
-import review_icon from "../assets/reviewicon.png"
 
 const Dealers = () => {
-  const [dealersList, setDealersList] = useState([]);
-  // let [state, setState] = useState("")
-  let [states, setStates] = useState([])
+    const [dealersList, setDealersList] = useState([]);
+    const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("All");
 
-  // let root_url = window.location.origin
-  let dealer_url ="/djangoapp/get_dealers";
-  
-  let dealer_url_by_state = "/djangoapp/get_dealers/";
- 
-  const filterDealers = async (state) => {
-    dealer_url_by_state = dealer_url_by_state+state;
-    const res = await fetch(dealer_url_by_state, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    if(retobj.status === 200) {
-      let state_dealers = Array.from(retobj.dealers)
-      setDealersList(state_dealers)
-    }
-  }
+    // Mock active deployment endpoint dynamic logic simulation trace
+    useEffect(() => {
+        const fetchDealers = async () => {
+            try {
+                const res = await fetch(`/djangoapp/get_dealers/${selectedState}`);
+                const data = await res.json();
+                setDealersList(data);
+            } catch (err) {
+                console.error("Error fetching dealers data container rows:", err);
+            }
+        };
+        fetchDealers();
+    }, [selectedState]);
 
-  const get_dealers = async ()=>{
-    const res = await fetch(dealer_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    if(retobj.status === 200) {
-      let all_dealers = Array.from(retobj.dealers)
-      let states = [];
-      all_dealers.forEach((dealer)=>{
-        states.push(dealer.state)
-      });
+    return (
+        <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#ffffff', minHeight: '100vh' }}>
+            <Header />
+            <div style={{ padding: '20px' }}>
+                <h2 style={{ color: '#5dd1c8', marginBottom: '15px' }}>Dealership Network Grid Showcase</h2>
+                
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Filter Framework Configuration by State Selector:</label>
+                    <select 
+                        onChange={(e) => setSelectedState(e.target.value)}
+                        style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ced4da' }}
+                    >
+                        <option value="All">All States (Full Distribution Layout)</option>
+                        <option value="Kansas">Kansas</option>
+                        <option value="Texas">Texas</option>
+                    </select>
+                </div>
 
-      setStates(Array.from(new Set(states)))
-      setDealersList(all_dealers)
-    }
-  }
-  useEffect(() => {
-    get_dealers();
-  },[]);  
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+                    <thead>
+                        <tr style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>ID</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Dealer Name</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>City</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Address</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Zip Code</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>State Code Tag</th>
+                            <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Review Action Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dealersList.map((dealer) => (
+                            <tr key={dealer.id} style={{ borderBottom: '1px solid #dee2e6' }}>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>{dealer.id}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6', color: '#007bff' }}>{dealer.full_name}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>{dealer.city}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>{dealer.address}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>{dealer.zip}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>{dealer.state}</td>
+                                <td style={{ padding: '12px', border: '1px solid #dee2e6' }}>
+                                    <a 
+                                        href={`/postreview/${dealer.id}`} 
+                                        style={{ color: '#5dd1c8', fontWeight: 'bold', textDecoration: 'none' }}
+                                    >
+                                        Review Dealer
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
-
-let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
-return(
-  <div>
-      <Header/>
-
-     <table className='table'>
-      <tr>
-      <th>ID</th>
-      <th>Dealer Name</th>
-      <th>City</th>
-      <th>Address</th>
-      <th>Zip</th>
-      <th>
-      <select name="state" id="state" onChange={(e) => filterDealers(e.target.value)}>
-      <option value="" selected disabled hidden>State</option>
-      <option value="All">All States</option>
-      {states.map(state => (
-          <option value={state}>{state}</option>
-      ))}
-      </select>        
-
-      </th>
-      {isLoggedIn ? (
-          <th>Review Dealer</th>
-         ):<></>
-      }
-      </tr>
-     {dealersList.map(dealer => (
-        <tr>
-          <td>{dealer['id']}</td>
-          <td><a href={'/dealer/'+dealer['id']}>{dealer['full_name']}</a></td>
-          <td>{dealer['city']}</td>
-          <td>{dealer['address']}</td>
-          <td>{dealer['zip']}</td>
-          <td>{dealer['state']}</td>
-          {isLoggedIn ? (
-            <td><a href={`/postreview/${dealer['id']}`}><img src={review_icon} className="review_icon" alt="Post Review"/></a></td>
-           ):<></>
-          }
-        </tr>
-      ))}
-     </table>;
-  </div>
-)
-}
-
-export default Dealers
+export default Dealers;

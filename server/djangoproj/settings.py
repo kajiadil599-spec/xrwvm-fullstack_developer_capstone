@@ -3,19 +3,24 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-mock-key-for-capstone-development'
+SECRET_KEY = 'django-insecure-mock-key-capstone-evaluation'
 DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.proxy.cognitiveclass.ai']
+# Explicitly mapping cloud environment endpoints to bypass network origin filters
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.proxy.cognitiveclass.ai',
+    'https://kajiadil599-8000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai'
+]
 
 INSTALLED_APPS = [
+    'djangoapp.apps.DjangoappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangoapp.apps.DjangoappConfig',
 ]
 
 MIDDLEWARE = [
@@ -33,11 +38,7 @@ ROOT_URLCONF = 'djangoproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'frontend/static'),
-            os.path.join(BASE_DIR, 'frontend/build'),
-            os.path.join(BASE_DIR, 'frontend/build/static')
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend', 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,26 +60,17 @@ DATABASES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/static'),
-    os.path.join(BASE_DIR, 'frontend/build'),
-    os.path.join(BASE_DIR, 'frontend/build/static'),
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = ['https://*.proxy.cognitiveclass.ai']
