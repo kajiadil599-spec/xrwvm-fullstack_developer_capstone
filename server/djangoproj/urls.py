@@ -5,16 +5,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('about/', TemplateView.as_view(template_name='About.html')),
-    path('contact/', TemplateView.as_view(template_name='Contact.html')),
     path('admin/', admin.site.urls),
     path('djangoapp/', include('djangoapp.urls')),
-    
-    # Structural Single Page Application Entry Interceptors
-    path('dealers/', TemplateView.as_view(template_name="index.html")),
-    path('dealer/<int:dealer_id>', TemplateView.as_view(template_name="index.html")),
-    path('postreview/<int:dealer_id>', TemplateView.as_view(template_name="index.html")),
+    path('', TemplateView.as_view(template_name="index.html")),
+    path('about/', TemplateView.as_view(template_name="About.html")),
+    path('contact/', TemplateView.as_view(template_name="Contact.html")),
     path('login/', TemplateView.as_view(template_name="index.html")),
     path('register/', TemplateView.as_view(template_name="index.html")),
-    path('', TemplateView.as_view(template_name="index.html")),
+    path('logout-test/', TemplateView.as_view(template_name="logout-test.html")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

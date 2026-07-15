@@ -24,7 +24,19 @@ let checkSession = ()=>{
   }
  }
 </script>
-</head>
+
+    <script>
+    window.logout = async function() {
+        let username = sessionStorage.getItem('username') || 'user';
+        alert('Logging out ' + username + '...');
+        try {
+            await fetch(window.location.origin + '/djangoapp/logout');
+        } catch(e) {}
+        sessionStorage.removeItem('username');
+        window.location.href = window.location.origin;
+    };
+    </script>
+    </head>
 <body onload="checkSession()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
   <div class="container-fluid">

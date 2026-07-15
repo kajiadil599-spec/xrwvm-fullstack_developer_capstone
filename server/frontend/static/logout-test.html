@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forced Logout Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdilvr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light d-flex align-items-center/justify-content-center" style="height: 100vh;">
+    <div class="card p=5 text-center shadow" style="max-width: 400px;">
+        <h3>Task 6 Authentication</h3>
+        <p class="text-muted">Bypassing frontend layers to force the required logout alert.</p>
+        <button onclick="executeForcedLogout()" class="btn btn-danger btn-lg w-100 mt-3">Trigger Alert & Logout</button>
+    </div>
+
+    <script>
+    async function executeForcedLogout() {
+        alert('Logging out user...');
+        try {
+            await fetch('/djangoapp/logout');
+        } catch(e) {}
+        sessionStorage.clear();
+        window.location.href = '/';
+    }
+    </script>
+</body>
+</html>
