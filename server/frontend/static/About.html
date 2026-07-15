@@ -3,39 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Best Cars</title>
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/style.css">
+    <title>About Us - Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar-brand { font-weight: bold; color: #0d6efd !important; }
+        .team-card { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; height: 100%; }
+        .team-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #0d6efd; }
+        .footer { background: #212529; color: #777; padding: 20px 0; font-size: 14px; margin-top: 60px; }
+    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Best Cars</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="container">
+            <a class="navbar-brand" href="/">🚗 Best Cars</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row align-items-center">
-            <div class="col-md-6" id="about-header">
-                <h1>About Us</h1>
-                <p class="lead">Welcome to Best Cars dealership, home to the best cars in North America. We deal in selling domestic and imported cars at reasonable prices.</p>
-                <p>Our mission is to provide an elite, transparent, and seamless car buying experience. With over two decades of trusted service, we carry an outstanding collection of sedans, SUVs, and high-performance sports cars tailored to fit your lifestyle.</p>
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="font-weight-bold text-dark">About Best Cars Dealership</h2>
+            <p class="lead text-muted">Welcome to Best Cars, your premium destination for quality vehicles and unparalleled customer service. Established with a vision to redefine dealership transparency, we provide an expansive selection of cars alongside verified, direct user insight metrics.</p>
+        </div>
+
+        <h3 class="text-center mb-4">Our Leadership Team</h3>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="team-card">
+                    <img src="https://picsum.photos/id/64/200/200" alt="Upkar Lidder" class="team-img">
+                    <h5>Upkar Lidder</h5>
+                    <p class="text-primary font-weight-bold">Co-Founder & CEO</p>
+                    <p class="text-muted small">Driving innovations across modern web deployment systems and customer relationships.</p>
+                    <a href="mailto:upkar@bestcars.com" class="btn btn-sm btn-outline-secondary">Email Upkar</a>
+                </div>
             </div>
-            <div class="col-md-6 text-center">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" alt="Dealership Manager" class="img-fluid rounded shadow-sm">
-                <h5 class="mt-3">John Doe</h5>
-                <p class="text-muted">General Manager</p>
+            <div class="col-md-4">
+                <div class="team-card">
+                    <img src="https://picsum.photos/id/1025/200/200" alt="Lavanya" class="team-img">
+                    <h5>Lavanya</h5>
+                    <p class="text-primary font-weight-bold">Chief Technical Officer</p>
+                    <p class="text-muted small">Architecting high-availability infrastructure networks and cloud application integrity.</p>
+                    <a href="mailto:lavanya@bestcars.com" class="btn btn-sm btn-outline-secondary">Email Lavanya</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2026 Best Cars Dealership Portal. All Rights Reserved.</p>
+        </div>
+    </footer>
 
 </body>
 </html>

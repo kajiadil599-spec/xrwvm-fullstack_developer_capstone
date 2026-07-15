@@ -3,60 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Best Cars</title>
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Contact Us - Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar-brand { font-weight: bold; color: #0d6efd !important; }
+        .contact-card { background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .contact-icon { font-size: 24px; color: #0d6efd; margin-right: 15px; }
+        .footer { background: #212529; color: #777; padding: 20px 0; font-size: 14px; margin-top: 60px; }
+    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Best Cars</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="container">
+            <a class="navbar-brand" href="/">🚗 Best Cars</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/contact">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/contact">Contact Us</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Contact Us</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Get In Touch</h3>
-                <p>Have questions about a vehicle or want to schedule a test drive? Reach out to our customer experience team.</p>
-                
-                <ul class="list-unstyled">
-                    <li class="mb-2"><strong>📍 Address:</strong> 123 Dealership Row, Toronto, ON, Canada</li>
-                    <li class="mb-2"><strong>📞 Phone:</strong> +1 (555) 019-2834</li>
-                    <li class="mb-2"><strong>✉️ Email:</strong> support@bestcars.com</li>
-                    <li class="mb-2"><strong>⏰ Hours:</strong> Mon - Sat: 9:00 AM - 7:00 PM</li>
-                </ul>
-            </div>
-            
-            <div class="col-md-6">
-                <h3>Send Us a Message</h3>
-                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for reaching out! We will reply shortly.');">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="John Doe" required>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="contact-card">
+                    <h2 class="mb-4 text-center text-dark font-weight-bold">Contact Our Dealership Team</h2>
+                    <hr class="mb-5">
+                    
+                    <div class="row text-center g-4">
+                        <div class="col-md-4">
+                            <div class="contact-icon">📍</div>
+                            <h5>Our Showroom</h5>
+                            <p class="text-muted">100 Dealership Way,<br>Kansas City, KS</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-icon">📧</div>
+                            <h5>Email Address</h5>
+                            <p class="text-muted"><a href="mailto:kajiadil599@gmail.com" class="text-decoration-none text-dark">kajiadil599@gmail.com</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-icon">📞</div>
+                            <h5>Phone Support</h5>
+                            <p class="text-muted">+1 (555) 019-2834<br>Mon-Sat: 9am - 6pm</p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" rows="4" placeholder="How can we help you today?" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2026 Best Cars Dealership Portal. All Rights Reserved.</p>
+        </div>
+    </footer>
 
 </body>
 </html>
