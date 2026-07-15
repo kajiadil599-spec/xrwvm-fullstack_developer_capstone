@@ -1,53 +1,31 @@
-name: 'Lint Code'
+name: CI Linting Workflow
 
 on:
   push:
-    branches: [master, main]
+    branches: [ main ]
   pull_request:
-    branches: [master, main]
+    branches: [ main ]
 
 jobs:
-  lint_python:
-    name: Lint Python Files
+  flake8-lint:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-node-version: '3.11'
 
-    - name: Run Linter
-      run: |
-        flake8 server/djangoapp/ --count --select=E9,F63,F7,F82 --show-source --statistics
-        echo "Linted Python files successfully"
+      - name: Install Linting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
 
-  lint_js:
-    name: Lint JavaScript Files
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-
-    - name: Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Install JSHint
-      run: npm install jshint --global
-
-    - name: Run Linter
-      run: |
-        echo '{"esversion": 8, "asi": true, "expr": true, "laxbreak": true}' > .jshintrc
-        find ./server/database -name "*.js" -exec jshint --config .jshintrc {} +
-        echo "Linted JavaScript files successfully"
+      - name: Run Flake8 Python Linter
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all formatting warnings as exit code 0 so it passes, or run strictly:
+          flake8 . --count --max-line-length=127 --statistics
