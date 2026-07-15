@@ -1,93 +1,84 @@
-import React, { useState,useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import "./Dealers.css";
-import "../assets/style.css";
-import positive_icon from "../assets/positive.png"
-import neutral_icon from "../assets/neutral.png"
-import negative_icon from "../assets/negative.png"
-import review_icon from "../assets/reviewbutton.png"
-import Header from '../Header/Header';
 
 const Dealer = () => {
-
-
-  const [dealer, setDealer] = useState({});
+  const [dealer, setDealer] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [unreviewed, setUnreviewed] = useState(false);
-  const [postReview, setPostReview] = useState(<></>)
+  const params = useParams();
+  const navigate = useNavigate();
+  let id = params.id;
 
-  let curr_url = window.location.href;
-  let root_url = curr_url.substring(0,curr_url.indexOf("dealer"));
-  let params = useParams();
-  let id =params.id;
-  let dealer_url = root_url+`djangoapp/dealer/${id}`;
-  let reviews_url = root_url+`djangoapp/reviews/dealer/${id}`;
-  let post_review = root_url+`postreview/${id}`;
-  
-  const get_dealer = async ()=>{
-    const res = await fetch(dealer_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    
-    if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      setDealer(dealerobjs[0])
+  const dealer_url = `/djangoapp/dealer/${id}`;
+  const reviews_url = `/djangoapp/reviews/dealer/${id}`;
+
+  const get_dealer = async () => {
+    const res = await fetch(dealer_url, { method: "GET" });
+    const output = await res.json();
+    if (output.status === 200 && output.dealer) {
+      setDealer(output.dealer);
     }
-  }
+  };
 
-  const get_reviews = async ()=>{
-    const res = await fetch(reviews_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    
-    if(retobj.status === 200) {
-      if(retobj.reviews.length > 0){
-        setReviews(retobj.reviews)
+  const get_reviews = async () => {
+    const res = await fetch(reviews_url, { method: "GET" });
+    const output = await res.json();
+    if (output.status === 200 && output.reviews) {
+      if (output.reviews.length > 0) {
+        setReviews(output.reviews);
       } else {
         setUnreviewed(true);
       }
     }
-  }
-
-  const senti_icon = (sentiment)=>{
-    let icon = sentiment === "positive"?positive_icon:sentiment==="negative"?negative_icon:neutral_icon;
-    return icon;
-  }
+  };
 
   useEffect(() => {
     get_dealer();
     get_reviews();
-    if(sessionStorage.getItem("username")) {
-      setPostReview(<a href={post_review}><img src={review_icon} style={{width:'10%',marginLeft:'10px',marginTop:'10px'}} alt='Post Review'/></a>)
+  }, []);
 
-      
-    }
-  },[]);  
-
-
-return(
-  <div style={{margin:"20px"}}>
-      <Header/>
-      <div style={{marginTop:"10px"}}>
-      <h1 style={{color:"grey"}}>{dealer.full_name}{postReview}</h1>
-      <h4  style={{color:"grey"}}>{dealer['city']},{dealer['address']}, Zip - {dealer['zip']}, {dealer['state']} </h4>
+  return (
+    <div style={{ margin: "20px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1 style={{ color: "turquoise" }}>{dealer?.full_name || "Loading Dealer..."}</h1>
+        <button 
+          onClick={() => navigate(`/postreview/${id}`)}
+          style={{ padding: "10px 20px", backgroundColor: "turquoise", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}
+        >
+          Post Review
+        </button>
       </div>
-      <div class="reviews_panel">
-      {reviews.length === 0 && unreviewed === false ? (
-        <text>Loading Reviews....</text>
-      ):  unreviewed === true? <div>No reviews yet! </div> :
-      reviews.map(review => (
-        <div className='review_panel'>
-          <img src={senti_icon(review.sentiment)} className="emotion_icon" alt='Sentiment'/>
-          <div className='review'>{review.review}</div>
-          <div className="reviewer">{review.name} {review.car_make} {review.car_model} {review.car_year}</div>
+      
+      {dealer && (
+        <div className="dealer-details-card" style={{ padding: "15px", backgroundColor: "#f9f9f9", marginTop: "10px", borderRadius: "5px" }}>
+          <p><strong>City:</strong> {dealer.city} | <strong>Address:</strong> {dealer.address}</p>
+          <p><strong>State:</strong> {dealer.state} | <strong>Zip:</strong> {dealer.zip}</p>
         </div>
-      ))}
-    </div>  
-  </div>
-)
-}
+      )}
+      
+      <div className="reviews_panel" style={{ marginTop: "20px" }}>
+        <h3 style={{ borderBottom: "2px solid turquoise", paddingBottom: "5px" }}>Dealer Feedback</h3>
+        {reviews.length === 0 && !unreviewed ? (
+          <p>Loading feedback grids...</p>
+        ) : unreviewed ? (
+          <p>No feedback posted yet for this dealership setup.</p>
+        ) : (
+          reviews.map((review, index) => (
+            <div className="review_card" key={index} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px 0", borderRadius: "4px" }}>
+              <span style={{ fontWeight: "bold", color: "turquoise", marginRight: "10px" }}>
+                [{review.sentiment || "neutral"}]
+              </span>
+              <span>{review.review}</span>
+              <div style={{ fontStyle: "italic", fontSize: "0.85em", color: "#666", marginTop: "5px" }}>
+                By: {review.name} {review.car_make ? `(${review.car_make} ${review.car_model} ${review.car_year})` : ""}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
 
-export default Dealer
+export default Dealer;

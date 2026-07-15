@@ -1,123 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import "./Dealers.css";
-import "../assets/style.css";
-import Header from '../Header/Header';
-
 
 const PostReview = () => {
-  const [dealer, setDealer] = useState({});
+  const [cars, setCars] = useState([]);
+  const [carMake, setCarMake] = useState("");
   const [review, setReview] = useState("");
-  const [model, setModel] = useState();
-  const [year, setYear] = useState("");
-  const [date, setDate] = useState("");
-  const [carmodels, setCarmodels] = useState([]);
+  const [name, setName] = useState("");
+  const [dealer, setDealer] = useState({});
+  
+  const params = useParams();
+  const navigate = useNavigate();
+  let dealerId = params.id;
 
-  let curr_url = window.location.href;
-  let root_url = curr_url.substring(0,curr_url.indexOf("postreview"));
-  let params = useParams();
-  let id =params.id;
-  let dealer_url = root_url+`djangoapp/dealer/${id}`;
-  let review_url = root_url+`djangoapp/add_review`;
-  let carmodels_url = root_url+`djangoapp/get_cars`;
-
-  const postreview = async ()=>{
-    let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
-    //If the first and second name are stores as null, use the username
-    if(name.includes("null")) {
-      name = sessionStorage.getItem("username");
+  const get_cars_list = async () => {
+    try {
+      const res = await fetch("/djangoapp/get_cars", { method: "GET" });
+      const output = await res.json();
+      console.log("Cars API Output:", output); // Debug log framework trace
+      const carList = output.CarModels || output.car_models || [];
+      setCars(carList);
+    } catch (error) {
+      console.error("Failed to fetch vehicles list:", error);
     }
-    if(!model || review === "" || date === "" || year === "" || model === "") {
-      alert("All details are mandatory")
+  };
+
+  const get_dealer_details = async () => {
+    try {
+      const res = await fetch(`/djangoapp/dealer/${dealerId}`, { method: "GET" });
+      const output = await res.json();
+      if (output.status === 200 && output.dealer) {
+        setDealer(output.dealer);
+      }
+    } catch (error) {
+      console.error("Failed to fetch dealer data maps:", error);
+    }
+  };
+
+  useEffect(() => {
+    get_cars_list();
+    get_dealer_details();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!carMake) {
+      alert("Please select a car model frame from the dropdown list!");
       return;
     }
+    const carDetails = carMake.split(" "); 
+    const payload = {
+      name: name,
+      dealership: dealerId,
+      review: review,
+      car_make: carDetails[0] || "",
+      car_model: carDetails[1] || "",
+      car_year: carDetails[2] || ""
+    };
 
-    let model_split = model.split(" ");
-    let make_chosen = model_split[0];
-    let model_chosen = model_split[1];
-
-    let jsoninput = JSON.stringify({
-      "name": name,
-      "dealership": id,
-      "review": review,
-      "purchase": true,
-      "purchase_date": date,
-      "car_make": make_chosen,
-      "car_model": model_chosen,
-      "car_year": year,
-    });
-
-    console.log(jsoninput);
-    const res = await fetch(review_url, {
+    const res = await fetch("/djangoapp/add_review", {
       method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: jsoninput,
-  });
-
-  const json = await res.json();
-  if (json.status === 200) {
-      window.location.href = window.location.origin+"/dealer/"+id;
-  }
-
-  }
-  const get_dealer = async ()=>{
-    const res = await fetch(dealer_url, {
-      method: "GET"
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
     });
-    const retobj = await res.json();
     
-    if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      if(dealerobjs.length > 0)
-        setDealer(dealerobjs[0])
+    if (res.status === 200) {
+      navigate(`/dealer/${dealerId}`);
     }
-  }
-
-  const get_cars = async ()=>{
-    const res = await fetch(carmodels_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    
-    let carmodelsarr = Array.from(retobj.CarModels)
-    setCarmodels(carmodelsarr)
-  }
-  useEffect(() => {
-    get_dealer();
-    get_cars();
-  },[]);
-
+  };
 
   return (
-    <div>
-      <Header/>
-      <div  style={{margin:"5%"}}>
-      <h1 style={{color:"darkblue"}}>{dealer.full_name}</h1>
-      <textarea id='review' cols='50' rows='7' onChange={(e) => setReview(e.target.value)}></textarea>
-      <div className='input_field'>
-      Purchase Date <input type="date" onChange={(e) => setDate(e.target.value)}/>
-      </div>
-      <div className='input_field'>
-      Car Make 
-      <select name="cars" id="cars" onChange={(e) => setModel(e.target.value)}>
-      <option value="" selected disabled hidden>Choose Car Make and Model</option>
-      {carmodels.map(carmodel => (
-          <option value={carmodel.CarMake+" "+carmodel.CarModel}>{carmodel.CarMake} {carmodel.CarModel}</option>
-      ))}
-      </select>        
-      </div >
+    <div style={{ margin: "40px", padding: "20px", fontFamily: "sans-serif" }}>
+      <h2 style={{ color: "turquoise" }}>Review Submission for: {dealer?.full_name || "Dealer Profile"}</h2>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "600px" }}>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+          <label style={{ fontWeight: "bold" }}>Your Name:</label>
+          <input type="text" placeholder="Enter your full name" required onChange={(e) => setName(e.target.value)} style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }} />
+        </div>
 
-      <div className='input_field'>
-      Car Year <input type="int" onChange={(e) => setYear(e.target.value)} max={2023} min={2015}/>
-      </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+          <label style={{ fontWeight: "bold" }}>Review Content:</label>
+          <textarea placeholder="Share your experience content details..." required onChange={(e) => setReview(e.target.value)} rows="5" style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }} />
+        </div>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+          <label style={{ fontWeight: "bold" }}>Vehicle Configuration Framework:</label>
+          <select required onChange={(e) => setCarMake(e.target.value)} style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc", backgroundColor: "#fff" }}>
+            <option value="">Select Car Model Frame (Expands Dynamically)</option>
+            {cars && cars.length > 0 ? (
+              cars.map((car, idx) => (
+                <option key={idx} value={`${car.CarMake} ${car.CarModel} ${car.CarYear}`}>
+                  {car.CarMake} - {car.CarModel} ({car.CarYear})
+                </option>
+              ))
+            ) : (
+              <option disabled value="">No models available in backend storage</option>
+            )}
+          </select>
+        </div>
+        
+        <button type="submit" style={{ padding: "12px", backgroundColor: "turquoise", color: "#fff", cursor: "pointer", border: "none", borderRadius: "4px", fontWeight: "bold", fontSize: "1.05em", marginTop: "10px" }}>
+          Submit Review
+        </button>
+      </form>
+    </div>
+  );
+};
 
-      <div>
-      <button className='postreview' onClick={postreview}>Post Review</button>
-      </div>
-    </div>
-    </div>
-  )
-}
-export default PostReview
+export default PostReview;
